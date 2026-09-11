@@ -25,6 +25,21 @@
 
 下载的视频默认保存在项目内的 `downloads` 文件夹。
 
+### Miniconda / Anaconda 方式
+
+如果电脑上已经安装了 Miniconda 或 Anaconda：
+
+1. 双击 `setup_conda_windows.bat`，它会创建独立环境 `link-video-downloader`。
+2. 以后双击 `download_video_conda.bat` 即可粘贴链接下载。
+
+也可以手动安装：
+
+```bash
+conda create -n link-video-downloader python=3.11 pip -y
+conda run -n link-video-downloader python -m pip install -e .
+conda run -n link-video-downloader linkvideo "视频链接" --quality 1080p
+```
+
 ### 命令行方式
 
 ```bash
