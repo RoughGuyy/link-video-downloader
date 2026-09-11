@@ -1,0 +1,41 @@
+name: build-windows-exe
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      - run: python -m pip install -e ".[build]"
+      - name: Build standalone EXE
+        run: >-
+          python -m PyInstaller --noconfirm --clean --onefile --windowed
+          --name LinkVideoDownloader --distpath release
+          --workpath build/pyinstaller --specpath build
+          --collect-all yt_dlp --collect-all imageio_ffmpeg launcher_gui.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: LinkVideoDownloader-Windows
+          path: release/LinkVideoDownloader.exe
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/')
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create "${{ github.ref_name }}"
+          release/LinkVideoDownloader.exe
+          --title "Link Video Downloader ${{ github.ref_name }}"
+          --generate-notes

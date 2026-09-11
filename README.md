@@ -11,6 +11,12 @@
 - 优先使用系统 FFmpeg，否则使用项目环境内的独立版本
 - Windows、macOS、Linux 均可使用
 
+## Windows 免安装版（推荐）
+
+从 [Releases](https://github.com/RoughGuyy/link-video-downloader/releases) 下载 `LinkVideoDownloader.exe`，双击即可打开图形界面。程序内可粘贴链接、选择保存位置、清晰度和编码，不需要安装 Python、Conda 或 FFmpeg。
+
+Windows 首次运行未知发布者的自编译程序时，可能会显示 SmartScreen 提示。你也可以从源码自行构建并核对代码。
+
 > 请只下载你拥有权利或已获授权保存的内容，并遵守平台条款与当地法律。本项目不绕过 DRM、付费墙、登录限制或其他访问控制。
 
 ## 安装
@@ -114,6 +120,15 @@ python -m unittest discover -s tests -v
 ```
 
 项目包含 GitHub Actions，会在 Python 3.10–3.13 上自动运行测试。
+
+构建 Windows 单文件程序：
+
+```bash
+python -m pip install -e ".[build]"
+build_exe.bat
+```
+
+生成文件位于 `release/LinkVideoDownloader.exe`。推送 `v*` 标签时，GitHub Actions 也会自动构建 EXE 并发布到 Releases。
 
 ## 工作方式
 

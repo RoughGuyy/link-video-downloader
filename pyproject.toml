@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "link-video-downloader"
-version = "0.3.0"
+version = "0.4.0"
 description = "Download public videos from Xiaohongshu, Bilibili, and YouTube with one command."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -29,6 +29,10 @@ dependencies = [
 
 [project.scripts]
 linkvideo = "linkvideo.cli:main"
+linkvideo-gui = "linkvideo.gui:main"
+
+[project.optional-dependencies]
+build = ["pyinstaller>=6.10,<7"]
 
 [project.urls]
 Homepage = "https://github.com/RoughGuyy/link-video-downloader"
