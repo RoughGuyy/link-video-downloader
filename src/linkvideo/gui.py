@@ -3,6 +3,8 @@ from __future__ import annotations
 import io
 import os
 import queue
+import subprocess
+import sys
 import threading
 import tkinter as tk
 from contextlib import redirect_stderr, redirect_stdout
@@ -15,6 +17,7 @@ from .xiaohongshu import download_xiaohongshu
 
 
 APP_NAME = "Link Video Downloader"
+UI_FONT = "PingFang SC" if sys.platform == "darwin" else "Microsoft YaHei UI"
 
 
 class QueueWriter(io.TextIOBase):
@@ -43,7 +46,7 @@ class DownloaderApp:
         root.title(APP_NAME)
         root.geometry("760x590")
         root.minsize(680, 520)
-        root.option_add("*Font", ("Microsoft YaHei UI", 10))
+        root.option_add("*Font", (UI_FONT, 10))
         self._build_ui()
         self.root.after(100, self._poll_events)
 
@@ -53,7 +56,7 @@ class DownloaderApp:
         outer.columnconfigure(0, weight=1)
         outer.rowconfigure(7, weight=1)
 
-        ttk.Label(outer, text=APP_NAME, font=("Microsoft YaHei UI", 20, "bold")).grid(
+        ttk.Label(outer, text=APP_NAME, font=(UI_FONT, 20, "bold")).grid(
             row=0, column=0, sticky="w"
         )
         ttk.Label(
@@ -132,7 +135,12 @@ class DownloaderApp:
     def _open_output(self) -> None:
         folder = Path(self.output.get()).expanduser()
         folder.mkdir(parents=True, exist_ok=True)
-        os.startfile(folder)  # type: ignore[attr-defined]
+        if sys.platform == "win32":
+            os.startfile(folder)  # type: ignore[attr-defined]
+        elif sys.platform == "darwin":
+            subprocess.Popen(["open", str(folder)])
+        else:
+            subprocess.Popen(["xdg-open", str(folder)])
 
     def _append_log(self, text: str) -> None:
         self.log.configure(state="normal")

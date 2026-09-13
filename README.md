@@ -11,11 +11,17 @@
 - 优先使用系统 FFmpeg，否则使用项目环境内的独立版本
 - Windows、macOS、Linux 均可使用
 
-## Windows 免安装版（推荐）
+## 桌面免安装版（推荐）
 
-从 [Releases](https://github.com/RoughGuyy/link-video-downloader/releases) 下载 `LinkVideoDownloader.exe`，双击即可打开图形界面。程序内可粘贴链接、选择保存位置、清晰度和编码，不需要安装 Python、Conda 或 FFmpeg。
+从 [Releases](https://github.com/RoughGuyy/link-video-downloader/releases) 下载与你的电脑匹配的文件：
 
-Windows 首次运行未知发布者的自编译程序时，可能会显示 SmartScreen 提示。你也可以从源码自行构建并核对代码。
+- Windows 10/11 64 位：`LinkVideoDownloader-Windows-x64.exe`
+- Apple M1/M2/M3/M4 等芯片：`LinkVideoDownloader-macOS-Apple-Silicon.zip`
+- Intel 芯片 Mac：`LinkVideoDownloader-macOS-Intel.zip`
+
+Windows 版直接双击 EXE。Mac 版解压 ZIP 后打开 `LinkVideoDownloader.app`。程序内可粘贴链接、选择保存位置、清晰度和编码，不需要安装 Python、Conda 或 FFmpeg。
+
+当前应用未使用商业代码签名证书。Windows 可能显示未知发布者提示，macOS 也可能提示无法验证开发者。你可以从源码自行构建并核对代码；面向大量用户正式分发时，建议购买相应平台的签名证书并完成公证。
 
 > 请只下载你拥有权利或已获授权保存的内容，并遵守平台条款与当地法律。本项目不绕过 DRM、付费墙、登录限制或其他访问控制。
 
@@ -128,7 +134,7 @@ python -m pip install -e ".[build]"
 build_exe.bat
 ```
 
-生成文件位于 `release/LinkVideoDownloader.exe`。推送 `v*` 标签时，GitHub Actions 也会自动构建 EXE 并发布到 Releases。
+生成文件位于 `release/LinkVideoDownloader.exe`。推送 `v*` 标签时，GitHub Actions 会自动构建 Windows x64、macOS Apple Silicon 和 macOS Intel 三个平台版本，并发布到 Releases。
 
 ## 工作方式
 
