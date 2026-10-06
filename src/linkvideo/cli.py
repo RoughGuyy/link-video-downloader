@@ -11,6 +11,12 @@ from .xiaohongshu import XiaohongshuError, download_xiaohongshu, probe_xiaohongs
 
 
 QUALITY_CHOICES = ("best", "2160p", "1440p", "1080p", "720p", "480p", "360p")
+DOWNLOAD_RETRIES = 10
+
+
+def _retry_sleep(attempt: int) -> int:
+    """Back off briefly between transient HTTP download failures."""
+    return min(2 ** max(attempt - 1, 0), 10)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -107,6 +113,21 @@ def _download_with_ytdlp(
         "outtmpl": str(output_dir / "%(title).120B [%(id)s].%(ext)s"),
         "noplaylist": True,
         "windowsfilenames": True,
+        # YoutubeDL's Python API does not inherit the CLI's retry defaults.
+        # Set them explicitly so an interrupted CDN response can resume from
+        # the existing .part file instead of failing the whole download.
+        "continuedl": True,
+        "retries": DOWNLOAD_RETRIES,
+        "fragment_retries": DOWNLOAD_RETRIES,
+        "file_access_retries": 3,
+        "extractor_retries": 3,
+        "socket_timeout": 30,
+        "retry_sleep_functions": {
+            "http": _retry_sleep,
+            "fragment": _retry_sleep,
+            "file_access": _retry_sleep,
+            "extractor": _retry_sleep,
+        },
     }
     if ffmpeg_path:
         options["ffmpeg_location"] = ffmpeg_path
